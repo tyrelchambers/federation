@@ -507,8 +507,6 @@ export class ApolloGateway implements GraphQLService {
     this.compositionMetadata = result.compositionMetadata;
     this.serviceDefinitions = result.serviceDefinitions;
 
-    if (this.queryPlanStore) this.queryPlanStore.flush();
-
     const { schema, supergraphSdl } = this.createSchemaFromServiceList(
       result.serviceDefinitions,
     );
@@ -570,8 +568,6 @@ export class ApolloGateway implements GraphQLService {
     this.compositionId = result.id;
     this.parsedSupergraphSdl = parsedSupergraphSdl;
 
-    if (this.queryPlanStore) this.queryPlanStore.flush();
-
     const { schema, supergraphSdl } = this.createSchemaFromSupergraphSdl(
       result.supergraphSdl,
     );
@@ -608,6 +604,7 @@ export class ApolloGateway implements GraphQLService {
     // Once we remove the deprecated onSchemaChange() method, we can remove this.
     legacyDontNotifyOnSchemaChangeListeners: boolean = false,
   ): void {
+    if (this.queryPlanStore) this.queryPlanStore.flush();
     this.schema = schema;
     this.queryPlanner = new QueryPlanner(schema);
 
